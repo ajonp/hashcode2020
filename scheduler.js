@@ -1,6 +1,7 @@
 class Scheduler {
-    constructor(bookScores) {
+    constructor(bookScores, totalDays) {
         this.bookScores = bookScores;
+        this.totalDays = totalDays;
     }
 
     getTotalBookScore(books) {
@@ -14,8 +15,9 @@ class Scheduler {
 
     rankLibrary(library) {
         const totalScore = this.getTotalBookScore(library['bookItems']);
-        return ((totalScore / library['bookItems'].length) * library['shipQty']) - library['days'];
-        // return ((totalScore / library['bookItems'].length) * (library['shipQty'] / this.totalDays)) - library['days'];
+        // return ((totalScore / library['bookItems'].length) * library['shipQty']) - library['days'];
+        return ((totalScore / library.booksQty) * (library.booksQty * library.shipQty + library.days ));
+        
     }
 }
 

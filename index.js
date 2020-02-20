@@ -16,8 +16,8 @@ let library;
 const files = [
 //   "./data/a_example.txt",
 //   "./data/b_read_on.txt",
-  "./data/c_incunabula.txt",
-//   "./data/d_tough_choices.txt",
+//   "./data/c_incunabula.txt",
+  "./data/d_tough_choices.txt",
 //   "./data/e_so_many_books.txt",
 //   "./data/f_libraries_of_the_world.txt"
 ];
@@ -67,14 +67,14 @@ files.forEach(filename => {
       // console.log('Header-Book Scores', bookScores);
       // console.log('Libraries', libraries);
 
-      const scheduler = new Scheduler(bookScores);
+      const scheduler = new Scheduler(bookScores, bld.days);
       const scoredLibraries = libraries
         .map((lib, i) => ({
           index: i,
           score: scheduler.rankLibrary(lib),
           library: lib
         }))
-        .sort((a, b) => (a.score >= b.score ? 1 : 0));
+        .sort((a, b) => (a.score >= b.score ? 1 : -1));
 
       console.log(scoredLibraries);
 
