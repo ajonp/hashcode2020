@@ -42,12 +42,33 @@ class Runner {
 
 
     scanBooks() {
-        this.
+        let currentBook = this.state.remainingBooksToScan[this.state.remainingBooksToScan.length - 1];
+        let keepScanning = true;
+        let libsAndBooksFromToday = this.signedUpLibraries.map(lib => ({
+            shippedSoFar: 0,
+            shippedBookIds: [],            
+            lib: lib,
+        }));
 
-        // look at next highest-score book
-        // browse all available libraries
-        // if found, add mapping, adjust remaining books for lib, and move on to next book
-        // otherwise look through next library
+        while(keepScanning) {            
+            this.libsAndBooksFromToday.forEach(lib => {
+                if(lib.shippedSoFar === lib.shipQty) {                    
+                    continue;
+                }
+
+                const foundBook = lib.lib.shippedBookIds.find(i => i === currentBook.index);
+                if (foundBook) {
+                    lib.push.shippedBookIds(i);
+                    lib.shippedSoFar++;
+                    this.state.remainingBooksToScan.pop();
+                    currentBook = this.state.remainingBooksToScan[this.state.remainingBooksToScan.length - 1];
+                }
+            })
+
+            keepScanning = this.libsAndBooksFromToday.find(lib => lib.shippedSoFar < lib.shipQty) || this.state.remainingBooksToScan.length !== 0;
+        }
+
+        return this.libsAndBooksFromToday();
     }
 }
 
