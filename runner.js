@@ -5,7 +5,7 @@ class Runner {
         
         this.state = {
             signingUpStatus: { id: -1, daysRemaining: 0 },
-            signedUpLibrariesById: [],
+            signedUpLibraries: [],
             totalScannedBookScore: 0,
             scannedBooksByLib: [],
             currentLibraryIndex: -1,
@@ -18,8 +18,8 @@ class Runner {
     run() {
         let currentDay = 0;
         while(currentDate <= this.totalDays) {
-            
             if(this.state.signingUpStatus.daysRemaining === 0) {
+                this.state.signedUpLibraries.push(this.libraries[this.state.currentLibraryIndex]);
                 this.state.currentLibraryIndex++;
                 this.signUpLibrary();
             } else {
@@ -32,10 +32,6 @@ class Runner {
     }   
 
     signUpLibrary() {
-        if(this.state.currentLibraryIndex > 0) {
-            this.state.signedUpLibrariesById.push(this.state.signingUpStatus.id);
-        }
-
         const library = this.libraries[this.state.currentLibraryIndex];
 
         this.state.signingUpStatus = {
@@ -46,9 +42,12 @@ class Runner {
 
 
     scanBooks() {
+        this.
+
         // look at next highest-score book
         // browse all available libraries
-        // if found 
+        // if found, add mapping, adjust remaining books for lib, and move on to next book
+        // otherwise look through next library
     }
 }
 
