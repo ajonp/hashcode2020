@@ -12,15 +12,11 @@ class Scheduler {
         return totalScore;
     }
 
-    /**
-     * library['books']
-     * library['days']
-     * library['shipQty']
-     */
     rankLibrary(library) {
         const totalScore = this.getTotalBookScore(library['bookItems']);
         return ((totalScore / library['bookItems'].length) * library['shipQty']) - library['days'];
-    } 
+        // return ((totalScore / library['bookItems'].length) * (library['shipQty'] / this.totalDays)) - library['days'];
+    }
 }
 
 module.exports = Scheduler;
