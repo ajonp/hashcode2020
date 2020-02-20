@@ -1,4 +1,6 @@
 const lineReader = require('line-reader');
+  //  Tabs or spaces???
+const Scheduler  = require('./scheduler');
 
 let l = 0;
 // Header
@@ -53,9 +55,14 @@ lineReader.eachLine('./data/a_example.txt', function(line,last) {
   l++;
 
   if(last){
-    console.log('Header-BLD', bld);
-    console.log('Header-Book Scores', bookScores);
-    console.log('Libraries', libraries);
+    // console.log('Header-BLD', bld);
+    // console.log('Header-Book Scores', bookScores);
+    // console.log('Libraries', libraries);
+
+    const scheduler = new Scheduler(bookScores);
+    libraries.forEach(lib => {
+        console.log(scheduler.rankLibrary(lib))
+    });
   }
 });
 
