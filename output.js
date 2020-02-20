@@ -6,8 +6,9 @@ class Output {
 
     */
 
-    constructor() {
+    constructor(filename) {
         this.write(
+            filename,
             2, 
             [
                 {
@@ -24,9 +25,9 @@ class Output {
         )
     }
 
-    write(numLibrariesForScanning, librariesArray){
+    write(filename, numLibrariesForScanning, librariesArray){
         const fs = require('fs');
-        var file = fs.createWriteStream('output.txt');
+        var file = fs.createWriteStream(`${filename}_output.txt`);
         file.on('error', function(err) { /* error handling */ });
 
         // LINE 1

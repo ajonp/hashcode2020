@@ -14,7 +14,18 @@ const libraries = [];
 
 let library;
 
-lineReader.eachLine('./data/a_example.txt', function(line,last) {
+const files = [
+    './data/a_example.txt',
+    './data/b_read_on.txt',
+    './data/c_incunabula.txt',
+    './data/d_tough_choices.txt',
+    './data/e_so_many_books.txt',
+    './data/f_libraries_of_the_world.txt'
+]
+
+const filename = files[0];
+
+lineReader.eachLine(filename, function(line,last) {
   var res = line.split(' ');
   /**
    * HEADER:
@@ -70,7 +81,8 @@ lineReader.eachLine('./data/a_example.txt', function(line,last) {
 
     console.log(scoredLibraries)
 
-    const output = new Output();
+    const output = new Output(filename);
+    console.log('wrote file')
   }
 });
 
