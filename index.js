@@ -15,12 +15,12 @@ const libraries = [];
 let library;
 
 const files = [
-     "./data/a_example.txt",
-//   "./data/b_read_on.txt",
-//   "./data/c_incunabula.txt",
-//   "./data/d_tough_choices.txt",
-//   "./data/e_so_many_books.txt",
-//   "./data/f_libraries_of_the_world.txt"
+"./data/a_example.txt",
+// "./data/b_read_on.txt",
+// "./data/c_incunabula.txt",
+// "./data/d_tough_choices.txt",
+// "./data/e_so_many_books.txt",
+// "./data/f_libraries_of_the_world.txt"
 ];
 
 files.forEach(filename => {
@@ -82,6 +82,8 @@ files.forEach(filename => {
       let runner = new Runner(bld.days, scoredLibraries, bookScores);
 
       let result = runner.run();
+
+      console.log(result);
 
       console.log("Run successful");
 

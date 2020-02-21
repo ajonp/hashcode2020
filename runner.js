@@ -2,6 +2,8 @@ class Runner {
     constructor(totalDays, libraries, bookScores) {
         this.totalDays = totalDays;
         this.libraries = libraries;
+        this.overallScore = 0;
+        this.bookScores = bookScores;
         
         this.state = {
             signingUpStatus: { id: 0, daysRemaining: 0 },
@@ -37,7 +39,8 @@ class Runner {
         }
 
         console.log(this.state.scannedBooksByLib);
-        return this.state.scannedBooksByLib;
+        return this.overallScore;
+        //return this.state.scannedBooksByLib;
     }   
 
     signUpLibrary() {
@@ -78,9 +81,8 @@ class Runner {
 
                 if (foundBook) {
                     this.state.scannedBooksByLib.push({ bookId: foundBook, libraryId: today.lib.index });
+                    this.overallScore += this.bookScores[foundBook];
                     today.shippedSoFar++;
-                    //this.state.remainingBooksToScan.pop();
-                    //currentBook = this.state.remainingBooksToScan[this.state.remainingBooksToScan.length - 1];
                     return;
                 }
             })
