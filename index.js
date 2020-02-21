@@ -1,6 +1,7 @@
 const lineReader = require("line-reader");
 //  Tabs or spaces???
 const Scheduler = require("./scheduler");
+const Runner = require("./runner");
 const Output = require("./output");
 
 let l = 0;
@@ -14,10 +15,10 @@ const libraries = [];
 let library;
 
 const files = [
-//   "./data/a_example.txt",
+     "./data/a_example.txt",
 //   "./data/b_read_on.txt",
 //   "./data/c_incunabula.txt",
-  "./data/d_tough_choices.txt",
+//   "./data/d_tough_choices.txt",
 //   "./data/e_so_many_books.txt",
 //   "./data/f_libraries_of_the_world.txt"
 ];
@@ -76,10 +77,16 @@ files.forEach(filename => {
         }))
         .sort((a, b) => (a.score >= b.score ? 1 : -1));
 
-      console.log(scoredLibraries);
+      //console.log(scoredLibraries);
 
-      const output = new Output(filename);
-      console.log("wrote file");
+      let runner = new Runner(bld.days, scoredLibraries, bookScores);
+
+      let result = runner.run();
+
+      console.log("Run successful");
+
+      //const output = new Output(filename);
+      //console.log("wrote file");
     }
   });
 });
