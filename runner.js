@@ -4,31 +4,40 @@ class Runner {
         this.libraries = libraries;
         
         this.state = {
-            signingUpStatus: { id: -1, daysRemaining: 0 },
+            signingUpStatus: { id: 0, daysRemaining: 0 },
             signedUpLibraries: [],
             totalScannedBookScore: 0,
             scannedBooksByLib: [],
-            currentLibraryIndex: -1,
+            currentLibraryIndex: 0,
             remainingBooksToScan: bookScores
                 .map((score, index) => ({score, index}))
-                .sort((a, b) => a.score > b.score ? 1 : 0)
+                .sort((a, b) => a.score > b.score ? 1 : -1)
         };
     }
 
     run() {
         let currentDay = 0;
-        while(currentDate <= this.totalDays) {
+        this.signUpLibrary();
+
+        while(currentDay++ <= this.totalDays) {
             if(this.state.signingUpStatus.daysRemaining === 0) {
                 this.state.signedUpLibraries.push(this.libraries[this.state.currentLibraryIndex]);
                 this.state.currentLibraryIndex++;
-                this.signUpLibrary();
+
+                if (this.state.currentLibraryIndex < this.libraries.length) {
+                    this.signUpLibrary();
+                }
             } else {
                 this.state.signingUpStatus.daysRemaining--;
             }
 
-            // TODO: Scan books by unsscanned books and highest score
-            this.scanBooks();
+            if (this.state.signedUpLibraries.length > 0) {
+                this.scanBooks();
+            }
         }
+
+        console.log(this.state.scannedBooksByLib);
+        return this.state.scannedBooksByLib;
     }   
 
     signUpLibrary() {
@@ -36,39 +45,52 @@ class Runner {
 
         this.state.signingUpStatus = {
             id: library.index,
-            daysRemaining: library.days
+            daysRemaining: library.library.days
         }
     }
 
 
     scanBooks() {
-        let currentBook = this.state.remainingBooksToScan[this.state.remainingBooksToScan.length - 1];
-        let keepScanning = true;
-        let libsAndBooksFromToday = this.signedUpLibraries.map(lib => ({
+        //let currentBook = this.state.remainingBooksToScan[this.state.remainingBooksToScan.length - 1];
+        let keepScanning = this.state.remainingBooksToScan.length !== 0;
+        let shippedBooks = [];
+
+        let libsAndBooksFromToday = this.state.signedUpLibraries.map(lib => ({
             shippedSoFar: 0,
             shippedBookIds: [],            
             lib: lib,
         }));
 
-        while(keepScanning) {            
-            this.libsAndBooksFromToday.forEach(lib => {
-                if(lib.shippedSoFar === lib.shipQty) {                    
-                    continue;
+        while(keepScanning) {    
+            let currentBook = this.state.remainingBooksToScan[this.state.remainingBooksToScan.length - 1];
+            let foundBook = null;
+
+            libsAndBooksFromToday.forEach(today => {                
+                if(today.shippedSoFar === today.lib.library.shipQty) {                    
+                    return;
                 }
 
-                const foundBook = lib.lib.shippedBookIds.find(i => i === currentBook.index);
+                try {
+                    foundBook = today.lib.library.bookItems.find(bookIndex => bookIndex === currentBook.index);
+                } catch(e) {
+                    debugger;
+                }
+
                 if (foundBook) {
-                    lib.push.shippedBookIds(i);
-                    lib.shippedSoFar++;
-                    this.state.remainingBooksToScan.pop();
-                    currentBook = this.state.remainingBooksToScan[this.state.remainingBooksToScan.length - 1];
+                    this.state.scannedBooksByLib.push({ bookId: foundBook, libraryId: today.lib.index });
+                    today.shippedSoFar++;
+                    //this.state.remainingBooksToScan.pop();
+                    //currentBook = this.state.remainingBooksToScan[this.state.remainingBooksToScan.length - 1];
+                    return;
                 }
             })
 
-            keepScanning = this.libsAndBooksFromToday.find(lib => lib.shippedSoFar < lib.shipQty) || this.state.remainingBooksToScan.length !== 0;
+            this.state.remainingBooksToScan.pop();
+            
+            keepScanning = 
+                libsAndBooksFromToday.find(today => today.shippedSoFar < today.lib.library.shipQty) &&
+                this.state.remainingBooksToScan.length !== 0;
         }
-
-        return this.libsAndBooksFromToday();
     }
 }
 
