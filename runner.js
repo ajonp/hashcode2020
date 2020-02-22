@@ -21,7 +21,7 @@ class Runner {
         let currentDay = 0;
         this.signUpLibrary();
 
-        while(currentDay++ <= this.totalDays) {
+        while(currentDay++ <= (this.totalDays + 1000)) {
             if(this.state.signingUpStatus.daysRemaining === 0) {
                 this.state.signedUpLibraries.push(this.libraries[this.state.currentLibraryIndex]);
                 this.state.currentLibraryIndex++;
@@ -38,9 +38,8 @@ class Runner {
             }
         }
 
-        console.log(this.state.scannedBooksByLib);
+        //console.log(this.state.scannedBooksByLib);
         return this.overallScore;
-        //return this.state.scannedBooksByLib;
     }   
 
     signUpLibrary() {
@@ -68,21 +67,21 @@ class Runner {
             let currentBook = this.state.remainingBooksToScan[this.state.remainingBooksToScan.length - 1];
             let foundBook = null;
 
-            libsAndBooksFromToday.forEach(today => {                
-                if(today.shippedSoFar === today.lib.library.shipQty) {                    
+            libsAndBooksFromToday.forEach(libDailyTracker => {                
+                if(libDailyTracker.shippedSoFar === libDailyTracker.lib.library.shipQty) {                    
                     return;
                 }
 
                 try {
-                    foundBook = today.lib.library.bookItems.find(bookIndex => bookIndex === currentBook.index);
+                    foundBook = libDailyTracker.lib.library.bookItems.find(bookIndex => bookIndex === currentBook.index);
                 } catch(e) {
                     debugger;
                 }
 
                 if (foundBook) {
-                    this.state.scannedBooksByLib.push({ bookId: foundBook, libraryId: today.lib.index });
+                    this.state.scannedBooksByLib.push({ bookId: foundBook, libraryId: libDailyTracker.lib.index });
                     this.overallScore += this.bookScores[foundBook];
-                    today.shippedSoFar++;
+                    libDailyTracker.shippedSoFar++;
                     return;
                 }
             })

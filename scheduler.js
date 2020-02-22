@@ -15,8 +15,12 @@ class Scheduler {
 
     rankLibrary(library) {
         const totalScore = this.getTotalBookScore(library['bookItems']);
-        // return ((totalScore / library['bookItems'].length) * library['shipQty']) - library['days'];
-        return ((totalScore / library.booksQty) * (library.booksQty * library.shipQty + library.days ));
+
+
+        const libScore = (totalScore / library.booksQty) * (library.booksQty * library.shipQty / library.days);
+
+        //const libScore = ((totalScore / library.booksQty) * (library.booksQty * library.shipQty + library.days ));
+        return libScore;
         
     }
 }
